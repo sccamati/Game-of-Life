@@ -32,8 +32,6 @@ namespace Game_of_Life
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.akBox = new System.Windows.Forms.TextBox();
-            this.aliveBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tBox = new System.Windows.Forms.TextBox();
@@ -43,27 +41,17 @@ namespace Game_of_Life
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.startBtn = new System.Windows.Forms.Button();
             this.randomBtn = new System.Windows.Forms.Button();
-            this.board = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.board)).BeginInit();
+            this.gameBox = new System.Windows.Forms.PictureBox();
+            this.chartCells = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.colorRect = new System.Windows.Forms.CheckBox();
+            this.akBox = new System.Windows.Forms.ComboBox();
+            this.aliveBox = new System.Windows.Forms.TextBox();
+            this.boardMode = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartCells)).BeginInit();
             this.SuspendLayout();
-            // 
-            // akBox
-            // 
-            this.akBox.Location = new System.Drawing.Point(42, 25);
-            this.akBox.Name = "akBox";
-            this.akBox.Size = new System.Drawing.Size(45, 20);
-            this.akBox.TabIndex = 0;
-            this.akBox.Text = "10";
-            // 
-            // aliveBox
-            // 
-            this.aliveBox.Location = new System.Drawing.Point(109, 25);
-            this.aliveBox.Name = "aliveBox";
-            this.aliveBox.Size = new System.Drawing.Size(100, 20);
-            this.aliveBox.TabIndex = 1;
-            this.aliveBox.Text = "50";
             // 
             // label1
             // 
@@ -103,6 +91,7 @@ namespace Game_of_Life
             // MooreRadioBtn
             // 
             this.MooreRadioBtn.AutoSize = true;
+            this.MooreRadioBtn.Checked = true;
             this.MooreRadioBtn.Location = new System.Drawing.Point(376, 19);
             this.MooreRadioBtn.Name = "MooreRadioBtn";
             this.MooreRadioBtn.Size = new System.Drawing.Size(120, 17);
@@ -110,6 +99,7 @@ namespace Game_of_Life
             this.MooreRadioBtn.TabStop = true;
             this.MooreRadioBtn.Text = "Sąsiedztwo Moore\'a";
             this.MooreRadioBtn.UseVisualStyleBackColor = true;
+            this.MooreRadioBtn.Click += new System.EventHandler(this.MooreRadioBtn_Click);
             // 
             // NeumannRadioBtn
             // 
@@ -118,9 +108,9 @@ namespace Game_of_Life
             this.NeumannRadioBtn.Name = "NeumannRadioBtn";
             this.NeumannRadioBtn.Size = new System.Drawing.Size(157, 17);
             this.NeumannRadioBtn.TabIndex = 9;
-            this.NeumannRadioBtn.TabStop = true;
             this.NeumannRadioBtn.Text = "Sąsiedztwo von Neumann\'a";
             this.NeumannRadioBtn.UseVisualStyleBackColor = true;
+            this.NeumannRadioBtn.Click += new System.EventHandler(this.NeumannRadioBtn_Click);
             // 
             // startBtn
             // 
@@ -138,25 +128,9 @@ namespace Game_of_Life
             this.randomBtn.Name = "randomBtn";
             this.randomBtn.Size = new System.Drawing.Size(75, 23);
             this.randomBtn.TabIndex = 11;
-            this.randomBtn.Text = "Losuj";
+            this.randomBtn.Text = "Rysuj";
             this.randomBtn.UseVisualStyleBackColor = true;
             this.randomBtn.Click += new System.EventHandler(this.randomBtn_Click);
-            // 
-            // board
-            // 
-            chartArea1.Name = "ChartArea1";
-            this.board.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.board.Legends.Add(legend1);
-            this.board.Location = new System.Drawing.Point(42, 86);
-            this.board.Name = "board";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.board.Series.Add(series1);
-            this.board.Size = new System.Drawing.Size(772, 493);
-            this.board.TabIndex = 12;
-            this.board.Text = "chart1";
             // 
             // pictureBox1
             // 
@@ -166,13 +140,103 @@ namespace Game_of_Life
             this.pictureBox1.TabIndex = 13;
             this.pictureBox1.TabStop = false;
             // 
+            // gameBox
+            // 
+            this.gameBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.gameBox.Location = new System.Drawing.Point(42, 99);
+            this.gameBox.Name = "gameBox";
+            this.gameBox.Size = new System.Drawing.Size(800, 800);
+            this.gameBox.TabIndex = 14;
+            this.gameBox.TabStop = false;
+            this.gameBox.Click += new System.EventHandler(this.gameBox_Click);
+            // 
+            // chartCells
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chartCells.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartCells.Legends.Add(legend1);
+            this.chartCells.Location = new System.Drawing.Point(846, 99);
+            this.chartCells.Name = "chartCells";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartCells.Series.Add(series1);
+            this.chartCells.Size = new System.Drawing.Size(753, 595);
+            this.chartCells.TabIndex = 15;
+            this.chartCells.Text = "chart1";
+            // 
+            // colorRect
+            // 
+            this.colorRect.Location = new System.Drawing.Point(785, 27);
+            this.colorRect.Name = "colorRect";
+            this.colorRect.Size = new System.Drawing.Size(188, 17);
+            this.colorRect.TabIndex = 16;
+            this.colorRect.Text = "Zaznaczaj Umierajace/Ozywajace";
+            this.colorRect.UseVisualStyleBackColor = true;
+            // 
+            // akBox
+            // 
+            this.akBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "10",
+            "20",
+            "30",
+            "40",
+            "50",
+            "60",
+            "70",
+            "80",
+            "90",
+            "100"});
+            this.akBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.akBox.Items.AddRange(new object[] {
+            "10",
+            "20",
+            "30",
+            "40",
+            "50",
+            "60",
+            "70",
+            "80",
+            "90",
+            "100"});
+            this.akBox.Location = new System.Drawing.Point(26, 23);
+            this.akBox.Name = "akBox";
+            this.akBox.Size = new System.Drawing.Size(49, 21);
+            this.akBox.TabIndex = 18;
+            // 
+            // aliveBox
+            // 
+            this.aliveBox.Location = new System.Drawing.Point(109, 25);
+            this.aliveBox.Name = "aliveBox";
+            this.aliveBox.Size = new System.Drawing.Size(100, 20);
+            this.aliveBox.TabIndex = 1;
+            this.aliveBox.Text = "50";
+            // 
+            // boardMode
+            // 
+            this.boardMode.AutoSize = true;
+            this.boardMode.Checked = true;
+            this.boardMode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.boardMode.Location = new System.Drawing.Point(785, 51);
+            this.boardMode.Name = "boardMode";
+            this.boardMode.Size = new System.Drawing.Size(256, 17);
+            this.boardMode.TabIndex = 19;
+            this.boardMode.Text = "Rysuj plansze z losowo wypełnionymi komórkami";
+            this.boardMode.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 793);
+            this.ClientSize = new System.Drawing.Size(1611, 908);
+            this.Controls.Add(this.boardMode);
+            this.Controls.Add(this.akBox);
+            this.Controls.Add(this.colorRect);
+            this.Controls.Add(this.chartCells);
+            this.Controls.Add(this.gameBox);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.board);
             this.Controls.Add(this.randomBtn);
             this.Controls.Add(this.startBtn);
             this.Controls.Add(this.NeumannRadioBtn);
@@ -182,20 +246,17 @@ namespace Game_of_Life
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.aliveBox);
-            this.Controls.Add(this.akBox);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.board)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartCells)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox akBox;
-        private System.Windows.Forms.TextBox aliveBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tBox;
@@ -205,8 +266,13 @@ namespace Game_of_Life
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Button randomBtn;
-        private System.Windows.Forms.DataVisualization.Charting.Chart board;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox gameBox;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartCells;
+        private System.Windows.Forms.CheckBox colorRect;
+        private System.Windows.Forms.ComboBox akBox;
+        private System.Windows.Forms.TextBox aliveBox;
+        private System.Windows.Forms.CheckBox boardMode;
     }
 }
 
