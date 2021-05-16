@@ -26,6 +26,7 @@ namespace Game_of_Life
         {
             InitializeComponent();
             akBox.SelectedIndex = 0;
+            stepSpeedBox.SelectedIndex = 0;
         }
 
         private void startBtn_Click(object sender, EventArgs e)
@@ -79,6 +80,20 @@ namespace Game_of_Life
                 gameBox.Refresh();
                 MakeChart();
                 chartCells.Update();
+                var equal = pomBoard.Rank == gameBoard.Rank && Enumerable.Range(0, pomBoard.Rank).All(dimension => pomBoard.GetLength(dimension) == gameBoard.GetLength(dimension)) && pomBoard.Cast<int>().SequenceEqual(gameBoard.Cast<int>());
+                if (equal)
+                {
+                    break;
+                }
+                pomBoard = (int[,])gameBoard.Clone();
+                if (stepSpeedBox.SelectedIndex == 1)
+                {
+                    Thread.Sleep(30);
+                }
+                else if (stepSpeedBox.SelectedIndex == 2)
+                {
+                    Thread.Sleep(100);
+                }
             }
             deadPercent.Clear();
             alivePercent.Clear();
@@ -93,6 +108,7 @@ namespace Game_of_Life
                 {
                     throw new Exception("maksymalna liczba żywych komórek to " + ak * ak);
                 }
+                startBtn.Visible = true;
                 gameBoard = new int[ak, ak];
                 pomBoard = new int[ak, ak];
                 alivePercent = new List<int>();
@@ -237,7 +253,7 @@ namespace Game_of_Life
             {
                 g.DrawLine(Pens.Black, new Point(0, j), new Point(ylines * ak, j));
             }
-            pomBoard = (int[,])gameBoard.Clone();
+
         }
 
         private void MakeChart()
@@ -251,9 +267,11 @@ namespace Game_of_Life
             chartMaker.AxisX.LabelStyle.Format = "";
             chartMaker.AxisY.LabelStyle.Format = "";
             chartMaker.AxisX.LabelStyle.IsEndLabelVisible = true;
+            chartMaker.AxisX.Title = "iteracje";
+            chartMaker.AxisY.Title = "%";
 
             chartMaker.AxisX.Minimum = 0;
-            chartMaker.AxisX.Maximum = t-1;
+            chartMaker.AxisX.Maximum = t - 1;
             chartMaker.AxisY.Interval = 10;
             chartMaker.AxisY.Minimum = 0;
             chartMaker.AxisY.Maximum = 100;
@@ -389,6 +407,29 @@ namespace Game_of_Life
                 }
             }
             gameBox.Refresh();
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void colorRect_CheckedChanged(object sender, EventArgs e)
+        {
+            if (colorRect.Checked)
+            {
+                cameAliveColor.Visible = true;
+                cameAliveDesc.Visible = true;
+                dyingColor.Visible = true;
+                dyingDesc.Visible = true;
+            }
+            else
+            {
+                cameAliveColor.Visible = false;
+                cameAliveDesc.Visible = false;
+                dyingColor.Visible = false;
+                dyingDesc.Visible = false;
+            }
         }
     }
 }

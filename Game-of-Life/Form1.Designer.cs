@@ -29,9 +29,9 @@ namespace Game_of_Life
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tBox = new System.Windows.Forms.TextBox();
@@ -48,6 +48,16 @@ namespace Game_of_Life
             this.akBox = new System.Windows.Forms.ComboBox();
             this.aliveBox = new System.Windows.Forms.TextBox();
             this.boardMode = new System.Windows.Forms.CheckBox();
+            this.stepSpeedBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.aliveCellLegend = new System.Windows.Forms.Label();
+            this.DeadCellLegend = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dyingColor = new System.Windows.Forms.Label();
+            this.dyingDesc = new System.Windows.Forms.Label();
+            this.cameAliveColor = new System.Windows.Forms.Label();
+            this.cameAliveDesc = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gameBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartCells)).BeginInit();
@@ -86,7 +96,7 @@ namespace Game_of_Life
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(76, 13);
             this.label4.TabIndex = 7;
-            this.label4.Text = "Liczba króków";
+            this.label4.Text = "Liczba krokow";
             // 
             // MooreRadioBtn
             // 
@@ -120,6 +130,7 @@ namespace Game_of_Life
             this.startBtn.TabIndex = 10;
             this.startBtn.Text = "start";
             this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Visible = false;
             this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
             // randomBtn
@@ -152,17 +163,17 @@ namespace Game_of_Life
             // 
             // chartCells
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartCells.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartCells.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.chartCells.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartCells.Legends.Add(legend2);
             this.chartCells.Location = new System.Drawing.Point(846, 99);
             this.chartCells.Name = "chartCells";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartCells.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartCells.Series.Add(series2);
             this.chartCells.Size = new System.Drawing.Size(753, 595);
             this.chartCells.TabIndex = 15;
             this.chartCells.Text = "chart1";
@@ -175,6 +186,7 @@ namespace Game_of_Life
             this.colorRect.TabIndex = 16;
             this.colorRect.Text = "Zaznaczaj Umierajace/Ozywajace";
             this.colorRect.UseVisualStyleBackColor = true;
+            this.colorRect.CheckedChanged += new System.EventHandler(this.colorRect_CheckedChanged);
             // 
             // akBox
             // 
@@ -226,11 +238,124 @@ namespace Game_of_Life
             this.boardMode.Text = "Rysuj plansze z losowo wypełnionymi komórkami";
             this.boardMode.UseVisualStyleBackColor = true;
             // 
+            // stepSpeedBox
+            // 
+            this.stepSpeedBox.FormattingEnabled = true;
+            this.stepSpeedBox.Items.AddRange(new object[] {
+            "szybko",
+            "srednio",
+            "wolno"});
+            this.stepSpeedBox.Location = new System.Drawing.Point(1063, 38);
+            this.stepSpeedBox.Name = "stepSpeedBox";
+            this.stepSpeedBox.Size = new System.Drawing.Size(121, 21);
+            this.stepSpeedBox.TabIndex = 20;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1081, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(89, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "szybkosc krokow";
+            // 
+            // aliveCellLegend
+            // 
+            this.aliveCellLegend.AutoSize = true;
+            this.aliveCellLegend.BackColor = System.Drawing.Color.Green;
+            this.aliveCellLegend.Location = new System.Drawing.Point(106, 80);
+            this.aliveCellLegend.Name = "aliveCellLegend";
+            this.aliveCellLegend.Size = new System.Drawing.Size(10, 13);
+            this.aliveCellLegend.TabIndex = 22;
+            this.aliveCellLegend.Text = " ";
+            this.aliveCellLegend.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // DeadCellLegend
+            // 
+            this.DeadCellLegend.AutoSize = true;
+            this.DeadCellLegend.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.DeadCellLegend.Location = new System.Drawing.Point(216, 80);
+            this.DeadCellLegend.Name = "DeadCellLegend";
+            this.DeadCellLegend.Size = new System.Drawing.Size(10, 13);
+            this.DeadCellLegend.TabIndex = 23;
+            this.DeadCellLegend.Text = " ";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(122, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(81, 13);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "- zywa komorka";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(232, 80);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(91, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "- martwa komorka";
+            // 
+            // dyingColor
+            // 
+            this.dyingColor.AutoSize = true;
+            this.dyingColor.BackColor = System.Drawing.Color.LightCoral;
+            this.dyingColor.Location = new System.Drawing.Point(336, 80);
+            this.dyingColor.Name = "dyingColor";
+            this.dyingColor.Size = new System.Drawing.Size(10, 13);
+            this.dyingColor.TabIndex = 26;
+            this.dyingColor.Text = " ";
+            this.dyingColor.Visible = false;
+            // 
+            // dyingDesc
+            // 
+            this.dyingDesc.AutoSize = true;
+            this.dyingDesc.BackColor = System.Drawing.SystemColors.Control;
+            this.dyingDesc.Location = new System.Drawing.Point(352, 80);
+            this.dyingDesc.Name = "dyingDesc";
+            this.dyingDesc.Size = new System.Drawing.Size(108, 13);
+            this.dyingDesc.TabIndex = 27;
+            this.dyingDesc.Text = "- umierajaca komorka";
+            this.dyingDesc.Visible = false;
+            // 
+            // cameAliveColor
+            // 
+            this.cameAliveColor.AutoSize = true;
+            this.cameAliveColor.BackColor = System.Drawing.Color.RoyalBlue;
+            this.cameAliveColor.Location = new System.Drawing.Point(476, 80);
+            this.cameAliveColor.Name = "cameAliveColor";
+            this.cameAliveColor.Size = new System.Drawing.Size(10, 13);
+            this.cameAliveColor.TabIndex = 28;
+            this.cameAliveColor.Text = " ";
+            this.cameAliveColor.Visible = false;
+            // 
+            // cameAliveDesc
+            // 
+            this.cameAliveDesc.AutoSize = true;
+            this.cameAliveDesc.Location = new System.Drawing.Point(492, 80);
+            this.cameAliveDesc.Name = "cameAliveDesc";
+            this.cameAliveDesc.Size = new System.Drawing.Size(107, 13);
+            this.cameAliveDesc.TabIndex = 29;
+            this.cameAliveDesc.Text = "- ozywajaca komorka";
+            this.cameAliveDesc.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1611, 908);
+            this.Controls.Add(this.cameAliveDesc);
+            this.Controls.Add(this.cameAliveColor);
+            this.Controls.Add(this.dyingDesc);
+            this.Controls.Add(this.dyingColor);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.DeadCellLegend);
+            this.Controls.Add(this.aliveCellLegend);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.stepSpeedBox);
             this.Controls.Add(this.boardMode);
             this.Controls.Add(this.akBox);
             this.Controls.Add(this.colorRect);
@@ -273,6 +398,16 @@ namespace Game_of_Life
         private System.Windows.Forms.ComboBox akBox;
         private System.Windows.Forms.TextBox aliveBox;
         private System.Windows.Forms.CheckBox boardMode;
+        private System.Windows.Forms.ComboBox stepSpeedBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label aliveCellLegend;
+        private System.Windows.Forms.Label DeadCellLegend;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label dyingColor;
+        private System.Windows.Forms.Label dyingDesc;
+        private System.Windows.Forms.Label cameAliveColor;
+        private System.Windows.Forms.Label cameAliveDesc;
     }
 }
 
